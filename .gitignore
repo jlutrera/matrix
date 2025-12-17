@@ -1,5 +1,4 @@
 *.docx
 .vscode
-*
-obj/
-matrix_display/
+obj/*.*
+matrix_display/*.*
