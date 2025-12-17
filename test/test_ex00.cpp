@@ -2,7 +2,11 @@
 #include "Matrix.hpp"
 #include "utils.hpp"
 
-int main(void) {
+#include <iostream>
+
+void test_ex00() {
+    std::cout << "[Exercise 00] Add, Subtract and Scale\n";
+    
     Vector v1({1, 2, 3});
     Vector v2({4, 5, 6});
 
@@ -29,6 +33,4 @@ int main(void) {
     printOperation("m1 + m2", m1 + m2);
     printOperation("m1 - m2", m1 - m2);
     printOperation("3 * m1", m1 * 3);
-
-    return 0;
 }

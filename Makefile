@@ -21,9 +21,11 @@ OBJ_DIR     = obj
 
 SRC         = $(wildcard $(SRC_DIR)/*.cpp)
 TEST_SRC    = $(wildcard $(TEST_DIR)/*.cpp)
+MAIN_SRC   	= main.cpp
 
 OBJ         = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 TEST_OBJ    = $(TEST_SRC:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+MAIN_OBJ    = $(OBJ_DIR)/main.o
 
 # ===========================
 #          COLORES
@@ -41,9 +43,9 @@ RESET       = \033[0m
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(TEST_OBJ)
+$(NAME): $(OBJ) $(TEST_OBJ) $(MAIN_OBJ)
 		@echo "$(BLUE)Linking $(NAME)...$(RESET)"
-		@$(CXX) $(CXXFLAGS) $(OBJ) $(TEST_OBJ) -o $(NAME)
+		@$(CXX) $(CXXFLAGS) $(OBJ) $(TEST_OBJ) $(MAIN_OBJ) -o $(NAME)
 		@echo "$(GREEN)✅ Tests compilados$(RESET)"
 
 # Crear carpeta obj si no existe
@@ -59,6 +61,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp | $(OBJ_DIR)
 		@echo "$(YELLOW)Compilando test $<...$(RESET)"
 		@$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Compilación de main.cpp
+$(OBJ_DIR)/main.o: main.cpp | $(OBJ_DIR)
+		@echo "$(YELLOW)Compilando main.cpp...$(RESET)"
+		@$(CXX) $(CXXFLAGS) -c main.cpp -o $(OBJ_DIR)/main.o
 
 run: $(NAME)
 		@echo "$(BLUE)Ejecutando tests...$(RESET)"
