@@ -1,3 +1,5 @@
 *.docx
 .vscode
-exe
+*
+obj/
+matrix_display/
