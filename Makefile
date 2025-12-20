@@ -3,28 +3,25 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yourlogin <yourlogin@student.42.fr>        +#+  +:+       +#+         #
+#    By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/01 00:00:00 by yourlogin         #+#    #+#              #
-#    Updated: 2025/01/01 00:00:00 by yourlogin        ###   ########.fr        #
+#    Created: 2025/12/20 11:33:29 by jutrera-          #+#    #+#              #
+#    Updated: 2025/12/20 11:33:29 by jutrera-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME        = matrix_tests
+NAME        = matrix
 
 CXX         = c++
 CXXFLAGS    = -Wall -Wextra -Werror -Iinclude
 
 SRC_DIR     = src
-TEST_DIR    = test
 OBJ_DIR     = obj
 
 SRC         = $(wildcard $(SRC_DIR)/*.cpp)
-TEST_SRC    = $(wildcard $(TEST_DIR)/*.cpp)
 MAIN_SRC   	= main.cpp
 
 OBJ         = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-TEST_OBJ    = $(TEST_SRC:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 MAIN_OBJ    = $(OBJ_DIR)/main.o
 
 # ===========================
@@ -43,10 +40,10 @@ RESET       = \033[0m
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(TEST_OBJ) $(MAIN_OBJ)
+$(NAME): $(OBJ) $(MAIN_OBJ)
 		@echo "$(BLUE)Linking $(NAME)...$(RESET)"
-		@$(CXX) $(CXXFLAGS) $(OBJ) $(TEST_OBJ) $(MAIN_OBJ) -o $(NAME)
-		@echo "$(GREEN)✅ Tests compilados$(RESET)"
+		@$(CXX) $(CXXFLAGS) $(OBJ) $(MAIN_OBJ) -o $(NAME)
+		@echo "$(GREEN)All test compiled$(RESET)"
 
 # Crear carpeta obj si no existe
 $(OBJ_DIR):
@@ -54,29 +51,23 @@ $(OBJ_DIR):
 
 # Compilación de src/
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-		@echo "$(YELLOW)Compilando $<...$(RESET)"
-		@$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Compilación de test/
-$(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp | $(OBJ_DIR)
-		@echo "$(YELLOW)Compilando test $<...$(RESET)"
+		@echo "$(YELLOW)Compiling $<...$(RESET)"
 		@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Compilación de main.cpp
 $(OBJ_DIR)/main.o: main.cpp | $(OBJ_DIR)
-		@echo "$(YELLOW)Compilando main.cpp...$(RESET)"
+		@echo "$(YELLOW)Compiling main.cpp...$(RESET)"
 		@$(CXX) $(CXXFLAGS) -c main.cpp -o $(OBJ_DIR)/main.o
 
 run: $(NAME)
-		@echo "$(BLUE)Ejecutando tests...$(RESET)"
 		@./$(NAME)
 
 clean:
-		@echo "$(RED)Eliminando objetos...$(RESET)"
+		@echo "$(RED)Deleting objets...$(RESET)"
 		@rm -rf $(OBJ_DIR)
 
 fclean: clean
-		@echo "$(RED)Eliminando ejecutable...$(RESET)"
+		@echo "$(RED)Deleting executable...$(RESET)"
 		@rm -f $(NAME)
 re: fclean all
 
@@ -86,7 +77,7 @@ re: fclean all
 
 debug: CXXFLAGS += -g3 -fsanitize=address
 debug: re
-		@echo "$(GREEN)✅ Compilado en modo DEBUG$(RESET)"
+		@echo "$(GREEN)Compiled in DEBUG mode$(RESET)"
 
 # ===========================
 #         PHONY

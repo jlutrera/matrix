@@ -1,23 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/20 11:35:20 by jutrera-          #+#    #+#             */
+/*   Updated: 2025/12/20 11:35:20 by jutrera-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
 #include <cstdlib>
 #include <limits>
 
 // Prototipos de tests (debes implementarlos en test/*.cpp)
-void test_ex00();
-void test_ex01();
-void test_ex02();
-// void test_ex03();
-// void test_ex04();
-// void test_ex05();
-// void test_ex06();
-// void test_ex07();
-// void test_ex08();
-// void test_ex09();
-// void test_ex10();
-// void test_ex11();
-// void test_ex12();
-// void test_ex13();
-// void test_ex14();
+void ex00();
+void ex01();
+// void ex02();
+// void ex03();
+// void ex04();
+// void ex05();
+// void ex06();
+// void ex07();
+// void ex08();
+// void ex09();
+// void ex10();
+// void ex11();
+// void ex12();
+// void ex13();
+// void ex14();
+// void ex15();
 
 static void clear_screen() {
 #ifdef _WIN32
@@ -28,7 +41,7 @@ static void clear_screen() {
 }
 
 static void wait_key() {
-    std::cout << "\nPulsa ENTER para continuar...";
+    std::cout << "\nPress ENTER to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 }
@@ -37,7 +50,7 @@ static void print_menu() {
     std::cout << "\n==============================\n";
     std::cout << "     ENTER THE MATRIX - TESTS\n";
     std::cout << "==============================\n";
-    std::cout << "Selecciona un ejercicio:\n\n";
+    std::cout << "Select an option:\n\n";
 
     std::cout << "  0  - Exercise 00: Add, Subtract, Scale\n";
     std::cout << "  1  - Exercise 01: Linear Combination\n";
@@ -53,32 +66,34 @@ static void print_menu() {
     std::cout << " 11  - Exercise 11: Determinant\n";
     std::cout << " 12  - Exercise 12: Inverse\n";
     std::cout << " 13  - Exercise 13: Rank\n";
-    std::cout << " 14  - Exercise 14: Projection Matrix\n\n";
+    std::cout << " 14  - Exercise 14: Bonus: Projection Matrix\n\n";
+    std::cout << " 15  - Exercise 15: Bonus: Complex vector spaces\n\n";
 
-    std::cout << " 99  - Salir\n\n";
-    std::cout << "Opción: ";
+    std::cout << " 99  - Quit\n\n";
+    std::cout << "Option: ";
 }
 
 static void run_test(int option) {
     switch (option) {
-        case 0:  test_ex00(); break;
-        case 1:  test_ex01(); break;
-        case 2:  test_ex02(); break;
-        // case 3:  test_ex03(); break;
-        // case 4:  test_ex04(); break;
-        // case 5:  test_ex05(); break;
-        // case 6:  test_ex06(); break;
-        // case 7:  test_ex07(); break;
-        // case 8:  test_ex08(); break;
-        // case 9:  test_ex09(); break;
-        // case 10: test_ex10(); break;
-        // case 11: test_ex11(); break;
-        // case 12: test_ex12(); break;
-        // case 13: test_ex13(); break;
-        // case 14: test_ex14(); break;
+        case 0:  ex00(); break;
+        case 1:  ex01(); break;
+        // case 2:  ex02(); break;
+        // case 3:  ex03(); break;
+        // case 4:  ex04(); break;
+        // case 5:  ex05(); break;
+        // case 6:  ex06(); break;
+        // case 7:  ex07(); break;
+        // case 8:  ex08(); break;
+        // case 9:  ex09(); break;
+        // case 10: ex10(); break;
+        // case 11: ex11(); break;
+        // case 12: ex12(); break;
+        // case 13: ex13(); break;
+        // case 14: ex14(); break;
+        // case 15: ex15(); break;
 
         default:
-            std::cout << "Opción no válida.\n";
+            std::cout << "Invalid option\n";
             break;
     }
 }
@@ -99,14 +114,14 @@ int main() {
 
         if (option == 99) {
             clear_screen();
-            std::cout << "Saliendo...\n";
+            std::cout << "Exiting...\n";
             break;
         }
 
         clear_screen();
         run_test(option);
 
-        std::cout << "\n--- Fin del test ---\n";
+        std::cout << "\n--- End of test ---\n";
         wait_key();
     }
 
