@@ -17,7 +17,6 @@
 
 template<typename K>
     class Matrix;
-
 template<typename K>
 class Vector
 {

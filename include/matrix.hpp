@@ -17,7 +17,6 @@
 
 template<typename K>
     class Vector;
-
 template<typename K>
 class Matrix
 {
@@ -38,7 +37,9 @@ class Matrix
         K& operator()(std::size_t r, std::size_t c);
 
     private:
-        Matrix(std::size_t r, std::size_t c, const std::vector<K>& values) : rows(r), cols(c), data(values) {}
+        Matrix(std::size_t r, std::size_t c, const std::vector<K>& values) : rows(r), 
+                                                                             cols(c),
+                                                                             data(values) {}
         std::size_t rows = 0;
         std::size_t cols = 0;
         std::vector<K> data;

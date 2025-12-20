@@ -13,10 +13,10 @@
 #include "vector.hpp"
 #include "matrix.hpp"
 #include "colors.hpp"
-
 #include <iostream>
 
-void ex00() {
+void ex00()
+{
     using K = float;
 
     std::cout << "*****************************************\n";
@@ -30,7 +30,7 @@ void ex00() {
     Vector<K> temp;
     Matrix<K> tempM;
 
-    std::cout << COLOR_NAME "I. TEST DATA\n" COLOR_RESET;
+    std::cout << COLOR_NAME "I. DATA\n" COLOR_RESET;
     std::cout << "---------------------------\n";
     u.print("  u");
     v.print("  v");
@@ -54,14 +54,14 @@ void ex00() {
     temp.print("  u - v");
     tempM = A;
     tempM.sub(B);
-    tempM.print("A - B");
+    tempM.print("  A - B");
 
     std::cout << COLOR_NAME "IV. SCALING\n" COLOR_RESET;
     std::cout << "---------------------------\n";
     temp = u;
     temp.scl(2);
-    temp.print(" 2 * u");
+    temp.print("  2 * u");
     tempM = A;
     tempM.scl(3);
-    tempM.print("3 * A");
+    tempM.print("  3 * A");
 }

@@ -14,9 +14,9 @@
 #include <cstdlib>
 #include <limits>
 
-// Prototipos de tests (debes implementarlos en test/*.cpp)
+// Prototypes for exercise functions
 void ex00();
-void ex01();
+void ex01_09();
 // void ex02();
 // void ex03();
 // void ex04();
@@ -32,21 +32,24 @@ void ex01();
 // void ex14();
 // void ex15();
 
-static void clear_screen() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
+static void clear_screen()
+{
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
 
-static void wait_key() {
+static void wait_key()
+{
     std::cout << "\nPress ENTER to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 }
 
-static void print_menu() {
+static void print_menu()
+{
     std::cout << "\n==============================\n";
     std::cout << "     ENTER THE MATRIX - TESTS\n";
     std::cout << "==============================\n";
@@ -54,29 +57,31 @@ static void print_menu() {
 
     std::cout << "  0  - Exercise 00: Add, Subtract, Scale\n";
     std::cout << "  1  - Exercise 01: Linear Combination\n";
-    std::cout << "  2  - Exercise 02: Linear Interpolation\n";
-    std::cout << "  3  - Exercise 03: Dot Product\n";
-    std::cout << "  4  - Exercise 04: Norm\n";
-    std::cout << "  5  - Exercise 05: Cosine\n";
-    std::cout << "  6  - Exercise 06: Cross Product\n";
-    std::cout << "  7  - Exercise 07: Matrix Multiplication\n";
-    std::cout << "  8  - Exercise 08: Trace\n";
-    std::cout << "  9  - Exercise 09: Transpose\n";
-    std::cout << " 10  - Exercise 10: Row-echelon Form\n";
-    std::cout << " 11  - Exercise 11: Determinant\n";
-    std::cout << " 12  - Exercise 12: Inverse\n";
-    std::cout << " 13  - Exercise 13: Rank\n";
-    std::cout << " 14  - Exercise 14: Bonus: Projection Matrix\n\n";
-    std::cout << " 15  - Exercise 15: Bonus: Complex vector spaces\n\n";
+    std::cout << "     - Exercise 02: Linear Interpolation\n";
+    std::cout << "     - Exercise 03: Dot Product\n";
+    std::cout << "     - Exercise 04: Norm\n";
+    std::cout << "     - Exercise 05: Cosine\n";
+    std::cout << "     - Exercise 06: Cross Product\n";
+    std::cout << "     - Exercise 07: Linear map, Matrix multiplication\n";
+    std::cout << "     - Exercise 08: Trace\n";
+    std::cout << "     - Exercise 09: Transpose\n";
+    std::cout << "  2  - Exercise 10: Row-echelon Form\n";
+    std::cout << "     - Exercise 11: Determinant\n";
+    std::cout << "     - Exercise 12: Inverse\n";
+    std::cout << "  3  - Exercise 13: Rank\n";
+    std::cout << "  4  - Exercise 14: Bonus: Projection Matrix\n\n";
+    std::cout << "  5  - Exercise 15: Bonus: Complex vector spaces\n\n";
 
     std::cout << " 99  - Quit\n\n";
     std::cout << "Option: ";
 }
 
-static void run_test(int option) {
-    switch (option) {
+static void run_test(int option)
+{
+    switch (option)
+    {
         case 0:  ex00(); break;
-        case 1:  ex01(); break;
+        case 1:  ex01_09(); break;
         // case 2:  ex02(); break;
         // case 3:  ex03(); break;
         // case 4:  ex04(); break;
@@ -98,21 +103,25 @@ static void run_test(int option) {
     }
 }
 
-int main() {
-    while (true) {
+int main()
+{
+    while (true)
+    {
         clear_screen();
         print_menu();
 
         int option;
         std::cin >> option;
 
-        if (!std::cin) {
+        if (!std::cin)
+        {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
             continue;
         }
 
-        if (option == 99) {
+        if (option == 99)
+        {
             clear_screen();
             std::cout << "Exiting...\n";
             break;
