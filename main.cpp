@@ -57,24 +57,38 @@ static void print_menu()
     std::cout << "==============================\n";
     std::cout << "Select an option:\n\n";
 
-    std::cout << "  0  : Exercise 00: Addiction\n";
-    std::cout << "  1  : Exercise 00: Subtraction\n";
-    std::cout << "  2  : Exercise 00: Scaling\n";
-    std::cout << "  3  : Exercise 01: Linear Combination\n";
-    std::cout << "  4  : Exercise 02: Linear Interpolation\n";
-    std::cout << "  5  : Exercise 03: Dot Product\n";
-    std::cout << "  6  : Exercise 04: Norm\n";
-    std::cout << "  7  : Exercise 05: Cosine between two vectors\n";
-    std::cout << "  8  : Exercise 06: Cross Product\n";
-    std::cout << "  9  : Exercise 07: Linear map, Matrix multiplication\n";
-    std::cout << " 10  : Exercise 08: Trace\n";
-    std::cout << " 11  : Exercise 09: Transpose\n";
-    std::cout << " 12  : Exercise 10: Row-Echelon Form\n";
-    std::cout << " 13  : Exercise 11: Determinant\n";
-    std::cout << " 14  : Exercise 12: Inverse\n";
-    std::cout << " 15  : Exercise 13: Rank\n";
-    std::cout << " 16  : Exercise 14: Bonus: Projection Matrix\n";
-    std::cout << " 17  : Exercise 15: Bonus: Complex vector spaces\n\n";
+    std::cout << "  I.  BASIC ALGEBRA\n";
+    std::cout << "*******************\n";
+    std::cout << "  0 : Exercise 00: Addiction\n";
+    std::cout << "  1 : Exercise 00: Subtraction\n";
+    std::cout << "  2 : Exercise 00: Scaling\n";
+    std::cout << "  3 : Exercise 01: Linear Combination\n";
+    std::cout << "  4 : Exercise 02: Linear Interpolation\n";
+
+    std::cout << " II.  NORMS AND PRODUCTS\n";
+    std::cout << "************************\n";
+    std::cout << "  5 : Exercise 03: Dot Product\n";
+    std::cout << "  6 : Exercise 04: Norm\n";
+    std::cout << "  7 : Exercise 05: Cosine between two vectors\n";
+    std::cout << "  8 : Exercise 06: Cross Product\n";
+
+    std::cout << "III.  MATRICIAL ALGEBRA\n";
+    std::cout << "***********************\n";
+    std::cout << "  9 : Exercise 07: Linear map, Matrix multiplication\n";
+    std::cout << " 10 : Exercise 08: Trace\n";
+    std::cout << " 11 : Exercise 09: Transpose\n";
+
+    std::cout << " IV.  SOLVING SYSTEMS OF LINEAR EQUATIONS\n";
+    std::cout << "*****************************************\n";
+    std::cout << " 12 : Exercise 10: Row-Echelon Form\n";
+    std::cout << " 13 : Exercise 11: Determinant\n";
+    std::cout << " 14 : Exercise 12: Inverse\n";
+    std::cout << " 15 : Exercise 13: Rank\n";
+
+    std::cout << "  V.  BONUS\n";
+    std::cout << "***********\n";
+    std::cout << " 16 : Exercise 14: Projection Matrix\n";
+    std::cout << " 17 : Exercise 15: Complex vector spaces\n\n";
 
     std::cout << " 99  - Quit\n\n";
     std::cout << "Option: ";
