@@ -12,13 +12,20 @@
 
 #pragma once
 
+#include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
+#include <complex>
+#include <algorithm>
+#include <stdexcept>
+
+#include "vector.hpp"
+#include "algebra.hpp"   // NECESARIO para fused_mul_add y abs_value
 #include "colors.hpp"
 
-//
-// CONSTRUCTOR
-//
+
+// CONSTRUCTORS
 template<typename K>
 Matrix<K>::Matrix(std::initializer_list<std::initializer_list<K>> init)
 {
@@ -30,48 +37,20 @@ Matrix<K>::Matrix(std::initializer_list<std::initializer_list<K>> init)
         for (const auto& val : row)
             data.push_back(val);
 }
+template<typename K>
+Matrix<K>::Matrix(std::size_t r, std::size_t c, const std::vector<K>& values) 
+    : rows(r), cols(c), data(values)
+{
+    if (values.size() != r * c)
+        throw std::invalid_argument("Value count does not match matrix shape");
+}
 
-//
 // GETTERS
-//
 template<typename K>
 std::size_t Matrix<K>::nrows() const { return rows; }
 
 template<typename K>
 std::size_t Matrix<K>::ncols() const { return cols; }
-
-template<typename K>
-void Matrix<K>::add(const Matrix<K>& m)
-{
-    for (std::size_t i = 0; i < data.size(); ++i)
-        data[i] += m.data[i];
-}
-
-template<typename K>
-void Matrix<K>::sub(const Matrix<K>& m)
-{
-    for (std::size_t i = 0; i < data.size(); ++i)
-        data[i] -= m.data[i];
-}
-
-template<typename K>
-void Matrix<K>::scl(K a)
-{
-    for (auto& x : data)
-        x *= a;
-}
-
-template<typename K>
-K& Matrix<K>::operator()(std::size_t r, std::size_t c)
-{
-    return data[r * cols + c];
-}
-
-template<typename K>
-const K& Matrix<K>::operator()(std::size_t r, std::size_t c) const
-{
-    return data[r * cols + c];
-}
 
 template<typename K>
 std::pair<std::size_t, std::size_t> Matrix<K>::shape() const
@@ -85,6 +64,50 @@ bool Matrix<K>::is_square() const
     return rows == cols;
 }
 
+// ADD
+template<typename K>
+void Matrix<K>::add(const Matrix<K>& m)
+{
+    if (rows != m.rows || cols != m.cols)
+        throw std::invalid_argument("Matrix sizes must match");
+
+    for (std::size_t i = 0; i < data.size(); ++i)
+        data[i] += m.data[i];
+}
+
+// SUBTRACT
+template<typename K>
+void Matrix<K>::sub(const Matrix<K>& m)
+{
+    if (rows != m.rows || cols != m.cols)
+        throw std::invalid_argument("Matrix sizes must match");
+
+    for (std::size_t i = 0; i < data.size(); ++i)
+        data[i] -= m.data[i];
+}
+
+// SCALE
+template<typename K>
+void Matrix<K>::scl(K a)
+{
+    for (auto& x : data)
+        x *= a;
+}
+
+// INDEXING
+template<typename K>
+K& Matrix<K>::operator()(std::size_t r, std::size_t c)
+{
+    return data[r * cols + c];
+}
+
+template<typename K>
+const K& Matrix<K>::operator()(std::size_t r, std::size_t c) const
+{
+    return data[r * cols + c];
+}
+
+// RESHAPE TO VECTOR
 template<typename K>
 Vector<K> Matrix<K>::reshape_to_vector() const
 {
@@ -93,7 +116,7 @@ Vector<K> Matrix<K>::reshape_to_vector() const
     return v;
 }
 
-
+// PRINT
 template<typename K>
 void Matrix<K>::print(const std::string& text) const
 {
@@ -150,4 +173,311 @@ void Matrix<K>::print(const std::string& text) const
             std::cout << " ";
     }
     std::cout << COLOR_BRACE " \u2518\n" COLOR_RESET;
+}
+
+// MATRIX * MATRIX
+template<typename K>
+Matrix<K> Matrix<K>::mul_mat(const Matrix<K>& B)
+{
+    if (this->ncols() != B.nrows())
+        throw std::invalid_argument("Matrix dimensions do not match for multiplication");
+
+    std::size_t m = this->nrows();
+    std::size_t n = this->ncols();
+    std::size_t p = B.ncols();
+
+    Matrix<K> C(m, p, std::vector<K>(m * p, 0));
+
+    for (std::size_t i = 0; i < m; ++i)
+    {
+        for (std::size_t j = 0; j < p; ++j)
+        {
+            K sum = K(0);
+
+            for (std::size_t k = 0; k < n; ++k)
+                sum = fused_mul_add((*this)(i, k), B(k, j), sum);
+
+            C(i, j) = sum;
+        }
+    }
+
+    return C;
+}
+
+// MATRIX * VECTOR
+template<typename K>
+Vector<K> Matrix<K>::mul_vec(const Vector<K>& v)
+{
+    if (this->ncols() != v.size())
+        throw std::invalid_argument("Matrix and vector dimensions do not match");
+
+    std::size_t m = this->nrows();
+    std::size_t n = this->ncols();
+
+    Vector<K> result;
+    result.resize(m, K());  // redimensionar el std::vector interno
+
+    for (std::size_t i = 0; i < m; ++i)
+    {
+        K sum = K(0);
+
+        for (std::size_t j = 0; j < n; ++j)
+            sum = fused_mul_add((*this)(i, j), v[j], sum);
+
+        result[i] = sum;
+    }
+
+    return result;
+}
+
+// TRACE
+template<typename K>
+K Matrix<K>::trace()
+{
+    if (!this->is_square())
+        throw std::invalid_argument("Trace is defined only for square matrices");
+
+    K sum = K(0);
+
+    for (std::size_t i = 0; i < rows; ++i)
+        sum += (*this)(i, i);
+
+    return sum;
+}
+
+// TRANSPOSE
+template<typename K>
+Matrix<K> Matrix<K>::transpose()
+{
+    Matrix<K> T(cols, rows, std::vector<K>(rows * cols, 0));
+
+    for (std::size_t i = 0; i < rows; ++i)
+        for (std::size_t j = 0; j < cols; ++j)
+            T(j, i) = (*this)(i, j);
+
+    return T;
+}
+
+// ROW ECHELON FORM
+template<typename K>
+Matrix<K> Matrix<K>::row_echelon() const
+{
+    Matrix<K> M = *this;
+    std::size_t m = rows;
+    std::size_t n = cols;
+
+    std::size_t lead = 0;
+
+    for (std::size_t r = 0; r < m; ++r)
+    {
+        if (lead >= n)
+            break;
+
+        std::size_t i = r;
+
+        // Buscar fila con pivote no cero
+        while (i < m && M(i, lead) == 0)
+            ++i;
+
+        // Si no hay pivote en esta columna, pasar a la siguiente
+        if (i == m)
+        {
+            ++lead;
+            --r; // repetir esta fila con la siguiente columna
+            continue;
+        }
+
+        // Intercambiar filas si es necesario
+        if (i != r)
+        {
+            for (std::size_t c = 0; c < n; ++c)
+                std::swap(M(r, c), M(i, c));
+        }
+
+        // Normalizar fila pivote
+        K pivot = M(r, lead);
+        if (abs_value(pivot) != 0.0)
+        {
+            for (std::size_t c = 0; c < n; ++c)
+                M(r, c) /= pivot;
+        }
+
+        // Eliminar filas por debajo
+        for (std::size_t rr = r + 1; rr < m; ++rr)
+        {
+            K factor = M(rr, lead);
+
+            if (abs_value(factor) != 0.0)
+            {
+                for (std::size_t c = 0; c < n; ++c)
+                    M(rr, c) = fused_mul_add(-factor, M(r, c), M(rr, c));
+            }
+        }
+
+        ++lead;
+    }
+
+    return M;
+}
+
+// DETERMINANT
+template<typename K>
+K Matrix<K>::determinant()
+{
+    if (!this->is_square())
+        throw std::invalid_argument("Determinant is defined only for square matrices");
+
+    std::size_t n = rows;
+    Matrix<K> M = *this;
+    K det = K(1);
+
+    for (std::size_t i = 0; i < n; ++i)
+    {
+        // Pivot must be non-zero
+        if (abs_value(M(i, i)) == 0.0)
+        {
+            bool swapped = false;
+            for (std::size_t r = i + 1; r < n; ++r)
+            {
+                if (abs_value(M(r, i)) != 0.0)
+                {
+                    for (std::size_t c = 0; c < n; ++c)
+                        std::swap(M(i, c), M(r, c));
+
+                    det = -det; // row swap flips sign
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped)
+                return 0; // determinant is zero
+        }
+
+        K pivot = M(i, i);
+        det *= pivot;
+
+        // Eliminate below pivot
+        for (std::size_t r = i + 1; r < n; ++r)
+        {
+            K factor = M(r, i) / pivot;
+
+            for (std::size_t c = i; c < n; ++c)
+                M(r, c) = fused_mul_add(-factor, M(i, c), M(r, c));
+        }
+    }
+
+    return det;
+}
+
+// INVERSE
+template<typename K>
+Matrix<K> Matrix<K>::inverse()
+{
+    if (!this->is_square())
+        throw std::invalid_argument("Inverse is defined only for square matrices");
+
+    std::size_t n = rows;
+
+    Matrix<K> M = *this;
+    Matrix<K> I(n, n, std::vector<K>(n * n, K(0)));
+
+    // Initialize identity
+    for (std::size_t i = 0; i < n; ++i)
+        I(i, i) = K(1);
+
+    for (std::size_t i = 0; i < n; ++i)
+    {
+        // Pivot must be non-zero
+        if (abs_value(M(i, i)) == 0.0)
+        {
+            bool swapped = false;
+            for (std::size_t r = i + 1; r < n; ++r)
+            {
+                if (abs_value(M(r, i)) != 0.0)
+                {
+                    for (std::size_t c = 0; c < n; ++c)
+                    {
+                        std::swap(M(i, c), M(r, c));
+                        std::swap(I(i, c), I(r, c));
+                    }
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped)
+                throw std::invalid_argument("Matrix is singular and cannot be inverted");
+        }
+
+        K pivot = M(i, i);
+
+        // Normalize pivot row
+        for (std::size_t c = 0; c < n; ++c)
+        {
+            M(i, c) /= pivot;
+            I(i, c) /= pivot;
+        }
+
+        // Eliminate other rows
+        for (std::size_t r = 0; r < n; ++r)
+        {
+            if (r == i) continue;
+
+            K factor = M(r, i);
+
+            for (std::size_t c = 0; c < n; ++c)
+            {
+                M(r, c) = fused_mul_add(-factor, M(i, c), M(r, c));
+                I(r, c) = fused_mul_add(-factor, I(i, c), I(r, c));
+            }
+        }
+    }
+
+    return I;
+}
+
+// RANK
+template<typename K>
+std::size_t Matrix<K>::rank() const
+{
+    Matrix<K> R = this->row_echelon();  // obtener REF
+    std::size_t m = R.nrows();
+    std::size_t n = R.ncols();
+
+    std::size_t rank = 0;
+
+    for (std::size_t i = 0; i < m; ++i)
+    {
+        bool non_zero_row = false;
+
+        for (std::size_t j = 0; j < n; ++j)
+        {
+            if (abs_value(R(i, j)) != 0.0)
+            {
+                non_zero_row = true;
+                break;
+            }
+        }
+
+        if (non_zero_row)
+            ++rank;
+    }
+
+    return rank;
+}
+
+// PROJECTION MATRIX
+template<typename K>
+Matrix<K> Matrix<K>::projection(K fov, K ratio, K near, K far)
+{
+    K t = std::tan(fov / (K)2);
+
+    Matrix<K> P(4, 4, std::vector<K>(16, K(0)));
+
+    P(0, 0) = 1 / (ratio * t);
+    P(1, 1) = 1 / t;
+    P(2, 2) = (far + near) / (near - far);
+    P(2, 3) = (2 * far * near) / (near - far);
+    P(3, 2) = K(-1);
+
+    return P;
 }
