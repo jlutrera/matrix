@@ -1,13 +1,8 @@
 # Matrix Library — Mathematical Foundations
 
-This project implements a small linear algebra library in **C++**, focusing on core operations used in:
+This project implements a small linear algebra library in **C++**, focused on core operations used in scientific computing, computer graphics, numerical methods, and machine learning.
 
-- Scientific computing  
-- Computer graphics  
-- Numerical methods  
-- Machine learning  
-
-This document explains the **mathematical foundations** behind each implemented function.
+All mathematical expressions are written using **LaTeX notation**, ensuring correct rendering on platforms such as **GitHub** and compatibility with standard mathematical conventions.
 
 ---
 
@@ -15,31 +10,31 @@ This document explains the **mathematical foundations** behind each implemented 
 
 ### Definition
 
-A matrix is in **Row Echelon Form (REF)** if it satisfies:
+A matrix $A$ is in **Row Echelon Form (REF)** if it satisfies:
 
-1. All non-zero rows appear above any rows consisting entirely of zeros.
-2. The leading coefficient (pivot) of each row is strictly to the right of the pivot in the row above.
+1. All non-zero rows appear above any rows of all zeros.
+2. The leading coefficient (pivot) of each non-zero row is strictly to the right of the pivot of the row above it.
 3. All entries below each pivot are zero.
 
 ### Purpose
 
 Row echelon form is used to:
 
-- Solve systems of linear equations
+- Solve linear systems
 - Compute the rank of a matrix
-- Determine whether a matrix is invertible
+- Determine invertibility
 - Prepare matrices for determinant or inverse computation
 
 ### Algorithm (Gaussian Elimination)
 
-Given a matrix \( A \in \mathbb{R}^{m \times n} \):
+Given a matrix $A \in \mathbb{R}^{m \times n}$:
 
-1. For each column, find a non-zero pivot.
-2. Swap rows if necessary to move the pivot into position.
-3. Normalize the pivot row so the pivot becomes \(1\).
+1. For each column $j$, find a pivot element $a_{ij} \neq 0$.
+2. Swap rows to move the pivot into position.
+3. Normalize the pivot row so that the pivot equals $1$.
 4. Eliminate all entries below the pivot.
 
-The resulting matrix is upper triangular and **row-equivalent** to the original matrix.
+The resulting matrix is upper triangular and **row-equivalent** to $A$.
 
 ---
 
@@ -47,32 +42,30 @@ The resulting matrix is upper triangular and **row-equivalent** to the original 
 
 ### Definition
 
-The **determinant** of a square matrix \( A \in \mathbb{R}^{n \times n} \), denoted by  
-\[
-\det(A),
-\]
-is a scalar that represents:
+For a square matrix $A \in \mathbb{R}^{n \times n}$, the **determinant** $\det(A)$ is a scalar that represents:
 
-- The scaling factor of the linear transformation defined by \(A\)
-- Whether \(A\) is invertible
-- The signed volume of the parallelepiped formed by its rows (or columns)
+- The scaling factor of the linear transformation induced by $A$
+- Whether $A$ is invertible
+- The signed volume of the parallelepiped spanned by its rows or columns
 
-### Key Properties
+### Fundamental Properties
 
-- \( \det(A) = 0 \iff A \) is singular (not invertible)
-- \( \det(AB) = \det(A)\det(B) \)
+- $\det(A) = 0 \iff A$ is singular
+- $\det(AB) = \det(A)\,\det(B)$
 - Swapping two rows changes the sign of the determinant
-- Multiplying a row by a scalar multiplies the determinant by that scalar
+- Multiplying a row by $\lambda$ multiplies the determinant by $\lambda$
 
-### Computation Methods
+### Computation
+
+Two classical methods exist:
 
 1. **Cofactor Expansion (Laplace Expansion)**  
-   Suitable for small matrices and educational clarity.
+   Suitable for small matrices and educational purposes.
 
 2. **Triangularization (Gaussian Elimination)**  
    Efficient for large matrices.
 
-This project uses **cofactor expansion** for clarity and mathematical transparency.
+This project uses **cofactor expansion** for mathematical clarity.
 
 ---
 
@@ -80,37 +73,36 @@ This project uses **cofactor expansion** for clarity and mathematical transparen
 
 ### Definition
 
-A square matrix \( A \in \mathbb{R}^{n \times n} \) is **invertible** if there exists a matrix  
-\( A^{-1} \) such that:
+A square matrix $A$ is **invertible** if there exists a matrix $A^{-1}$ such that:
 
-\[
-A A^{-1} = A^{-1} A = I_n
-\]
+$$
+A A^{-1} = I \quad \text{and} \quad A^{-1} A = I
+$$
 
-where \( I_n \) is the identity matrix.
+where $I$ is the identity matrix.
 
-### Existence of the Inverse
+### Existence Conditions
 
-A matrix is invertible if and only if:
+A matrix $A$ is invertible if and only if:
 
-- \( \det(A) \neq 0 \)
+- $\det(A) \neq 0$
 - Its rows (or columns) are linearly independent
 
 ### Algorithm (Gauss–Jordan Elimination)
 
 The inverse is computed using the augmented matrix:
 
-\[
+$$
 [A \mid I]
-\]
+$$
 
 Steps:
 
-1. Construct the augmented matrix \( [A \mid I] \).
-2. Apply row operations to transform \(A\) into \(I\).
-3. The right block becomes \( A^{-1} \).
+1. Apply row operations to transform $A$ into $I$.
+2. Apply the same operations to $I$.
+3. The resulting right block is $A^{-1}$.
 
-If a pivot cannot be found at any step, the matrix is singular and has no inverse.
+If a pivot cannot be found at any step, $A$ is singular and has no inverse.
 
 ---
 
@@ -118,14 +110,13 @@ If a pivot cannot be found at any step, the matrix is singular and has no invers
 
 ### Definition
 
-Given matrices  
-\( A \in \mathbb{R}^{m \times n} \) and  
-\( B \in \mathbb{R}^{n \times p} \),  
-their product \( C = AB \in \mathbb{R}^{m \times p} \) is defined by:
+Given matrices $A \in \mathbb{R}^{m \times n}$ and $B \in \mathbb{R}^{n \times p}$, their product $C = AB$ is defined by:
 
-\[
+$$
 C_{ij} = \sum_{k=0}^{n-1} A_{ik} B_{kj}
-\]
+$$
+
+The resulting matrix $C$ belongs to $\mathbb{R}^{m \times p}$.
 
 ### Interpretation
 
@@ -137,9 +128,9 @@ Matrix multiplication represents:
 
 ### Properties
 
-- **Not commutative:** \( AB \neq BA \)
-- **Associative:** \( (AB)C = A(BC) \)
-- **Distributive:** \( A(B + C) = AB + AC \)
+- Non-commutative: $AB \neq BA$
+- Associative: $(AB)C = A(BC)$
+- Distributive: $A(B + C) = AB + AC$
 
 ---
 
@@ -147,25 +138,20 @@ Matrix multiplication represents:
 
 ### Definition
 
-Given a matrix  
-\( A \in \mathbb{R}^{m \times n} \)  
-and a vector  
-\( v \in \mathbb{R}^{n} \),  
-the product \( u = Av \in \mathbb{R}^{m} \) is defined as:
+Given $A \in \mathbb{R}^{m \times n}$ and $v \in \mathbb{R}^n$, the product $Av \in \mathbb{R}^m$ is defined by:
 
-\[
-u_i = \sum_{k=0}^{n-1} A_{ik} v_k
-\]
+$$
+(Av)_i = \sum_{k=0}^{n-1} A_{ik} v_k
+$$
 
 ### Interpretation
 
-Matrix–vector multiplication applies a **linear transformation** to a vector.  
-This operation is fundamental in:
+Matrix–vector multiplication applies a linear transformation to a vector. It is fundamental in:
 
 - Computer graphics (rotations, scaling, projections)
 - Machine learning (linear layers)
 - Physics simulations
-- Solving systems of linear equations
+- Solving linear systems
 
 ---
 
@@ -173,32 +159,28 @@ This operation is fundamental in:
 
 ### Definition
 
-Given two vectors  
-\( a, b \in \mathbb{R}^{n} \),  
-their **dot product** is defined as:
+For vectors $a, b \in \mathbb{R}^n$, the **dot product** is defined as:
 
-\[
+$$
 a \cdot b = \sum_{i=0}^{n-1} a_i b_i
-\]
+$$
 
-### Geometric Meaning
+### Geometric Interpretation
 
-The dot product measures:
+The dot product satisfies:
 
-- Similarity between vectors
-- Projection of one vector onto another
-- The cosine of the angle between them:
+$$
+a \cdot b = \lVert a \rVert \, \lVert b \rVert \, \cos(\theta)
+$$
 
-\[
-a \cdot b = \|a\| \|b\| \cos(\theta)
-\]
+where $\theta$ is the angle between $a$ and $b$.
 
 ### Applications
 
-- Checking orthogonality: \( a \cdot b = 0 \)
-- Computing vector lengths and angles
-- Machine learning (cosine similarity)
-- Physics (work: \( W = \vec{F} \cdot \vec{d} \))
+- Orthogonality testing ($a \cdot b = 0$)
+- Computing vector norms and angles
+- Cosine similarity in machine learning
+- Physical work: $W = F \cdot d$
 
 ---
 
@@ -206,33 +188,29 @@ a \cdot b = \|a\| \|b\| \cos(\theta)
 
 Although not a mathematical operation, matrix printing is essential for:
 
-- Debugging
-- Visual verification of transformations
-- Understanding intermediate steps in algorithms
+- Debugging numerical algorithms
+- Verifying intermediate results
+- Visualizing matrix transformations
 
-The printed matrix reflects the internal **row-major storage** while preserving its mathematical structure.
+The printed representation preserves row-major order and reflects the underlying mathematical structure.
 
 ---
 
 ## Summary Table
 
-| Function      | Mathematical Concept     | Purpose                                   |
-|---------------|--------------------------|-------------------------------------------|
-| `row_echelon` | Gaussian elimination     | Solve systems, rank, invertibility        |
-| `determinant`| Determinant              | Volume, invertibility, orientation        |
-| `inverse`    | Gauss–Jordan elimination | Compute \( A^{-1} \)                      |
-| `mul_mat`    | Matrix multiplication    | Compose linear transformations            |
-| `mul_vec`    | Matrix–vector product    | Apply a linear transformation             |
-| `dot`        | Inner product            | Angle, projection, similarity             |
-| `print`      | Representation           | Debugging and verification                |
+| Function       | Mathematical Concept        | Purpose                                   |
+|----------------|-----------------------------|-------------------------------------------|
+| `row_echelon`  | Gaussian elimination        | Solve systems, rank computation            |
+| `determinant`  | Determinant                 | Volume, invertibility, orientation         |
+| `inverse`      | Gauss–Jordan elimination    | Compute $A^{-1}$                           |
+| `mul_mat`      | Matrix multiplication       | Compose linear transformations             |
+| `mul_vec`      | Matrix–vector multiplication| Apply linear transformations               |
+| `dot`          | Inner product               | Angle, projection, similarity              |
+| `print`        | Representation              | Debugging and verification                 |
 
 ---
 
 ## Final Notes
 
-This project introduces the essential building blocks of **linear algebra**.  
-A solid understanding of the mathematics behind each operation is crucial for writing:
-
-- Correct code  
-- Efficient algorithms  
-- Numerically stable implementations
+This project introduces the fundamental building blocks of linear algebra.
+A solid understanding of the mathematics behind each operation is essential for writing **correct**, **efficient**, and **numerically stable** implementations.
