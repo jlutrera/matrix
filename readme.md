@@ -51,7 +51,7 @@ For a square matrix $A \in \mathbb{R}^{n \times n}$, the **determinant** $\det(A
 ### Fundamental Properties
 
 - $\det(A) = 0 \iff A$ is singular
-- $\det(AB) = \det(A)\,\det(B)$
+- $\det(AB) = \det(A)\,·\det(B)$
 - Swapping two rows changes the sign of the determinant
 - Multiplying a row by $\lambda$ multiplies the determinant by $\lambda$
 
@@ -76,7 +76,7 @@ This project uses **cofactor expansion** for mathematical clarity.
 A square matrix $A$ is **invertible** if there exists a matrix $A^{-1}$ such that:
 
 $$
-A A^{-1} = I \quad \text{and} \quad A^{-1} A = I
+A·A^{-1} = I \quad \text{and} \quad A^{-1}·A = I
 $$
 
 where $I$ is the identity matrix.
@@ -113,7 +113,7 @@ If a pivot cannot be found at any step, $A$ is singular and has no inverse.
 Given matrices $A \in \mathbb{R}^{m \times n}$ and $B \in \mathbb{R}^{n \times p}$, their product $C = AB$ is defined by:
 
 $$
-C_{ij} = \sum_{k=0}^{n-1} A_{ik} B_{kj}
+C_{ij} = \sum_{k=0}^{n-1} A_{ik}·B_{kj}
 $$
 
 The resulting matrix $C$ belongs to $\mathbb{R}^{m \times p}$.
@@ -128,9 +128,9 @@ Matrix multiplication represents:
 
 ### Properties
 
-- Non-commutative: $AB \neq BA$
-- Associative: $(AB)C = A(BC)$
-- Distributive: $A(B + C) = AB + AC$
+- Non-commutative: $A·B \neq B·A$
+- Associative: $(A·B)·C = A·(B·C)$
+- Distributive: $A·(B+C) = A·B+A·C$
 
 ---
 
@@ -141,7 +141,7 @@ Matrix multiplication represents:
 Given $A \in \mathbb{R}^{m \times n}$ and $v \in \mathbb{R}^n$, the product $Av \in \mathbb{R}^m$ is defined by:
 
 $$
-(Av)_i = \sum_{k=0}^{n-1} A_{ik} v_k
+(Av)_i = \sum_{k=0}^{n-1} A_{ik}·v_k
 $$
 
 ### Interpretation
@@ -162,7 +162,7 @@ Matrix–vector multiplication applies a linear transformation to a vector. It i
 For vectors $a, b \in \mathbb{R}^n$, the **dot product** is defined as:
 
 $$
-a \cdot b = \sum_{i=0}^{n-1} a_i b_i
+a \cdot b = \sum_{i=0}^{n-1} a_i · b_i
 $$
 
 ### Geometric Interpretation
@@ -170,7 +170,7 @@ $$
 The dot product satisfies:
 
 $$
-a \cdot b = \lVert a \rVert \, \lVert b \rVert \, \cos(\theta)
+a \cdot b = \lVert a \rVert \,· \lVert b \rVert \,· \cos(\theta)
 $$
 
 where $\theta$ is the angle between $a$ and $b$.
