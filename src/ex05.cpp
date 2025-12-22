@@ -7,7 +7,7 @@ void ex05()
 {
     using K = float;
 
-    std::cout << COLOR_EX "[Exercise 05] COSINE BETWEEN TWO VECTORS\n" COLOR_RESET;
+    std::cout << COLOR_EX "[Exercise 05] COSINE\n" COLOR_RESET;
 
     Vector<K> u({1, 2});
     Vector<K> v({-5, 6});
@@ -21,7 +21,7 @@ void ex05()
     std::cout << "---------------------------\n";
     try
     {
-        std::cout << "  angle_cos(u, v) = " COLOR_NUM << angle_cos(u, v) << COLOR_RESET " rad\n\n";
+        std::cout << "  cos(u,v) = " COLOR_NUM << angle_cos(u, v) << COLOR_RESET " rad\n\n";
     }
     catch(const std::exception& e)
     {

@@ -120,7 +120,7 @@ Vector<K> Matrix<K>::reshape_to_vector() const
 template<typename K>
 void Matrix<K>::print(const std::string& text) const
 {
-    std::cout << text << "\n";
+    std::cout << text << " = ";
 
     auto [rows, cols] = shape();
 
@@ -138,7 +138,8 @@ void Matrix<K>::print(const std::string& text) const
     }
 
     // ---------- TOP BORDER ----------
-    std::cout << COLOR_BRACE "  \u250C " COLOR_RESET;
+    std::cout << COLOR_BRACE "\u250C " COLOR_RESET;
+
     for (size_t c = 0; c < cols; ++c)
     {
         std::cout << std::string(colWidths[c], ' ');
@@ -150,13 +151,14 @@ void Matrix<K>::print(const std::string& text) const
     // ---------- MATRIX CONTENT ----------
     for (size_t r = 0; r < rows; ++r)
     {
-       std::cout << COLOR_BRACE "  \u2502 " COLOR_RESET;
+        std::cout << std::string(text.size() + 3, ' ')
+            << COLOR_BRACE "\u2502 " COLOR_RESET;
 
         for (size_t c = 0; c < cols; ++c)
         {
-            std::ostringstream ss;
-            ss << std::setw(colWidths[c]) << (*this)(r, c);
-            std::cout << COLOR_NUM << ss.str() << COLOR_RESET;
+            std::cout << COLOR_NUM << std::setw(colWidths[c])
+                << (*this)(r, c) << COLOR_RESET;
+
             if (c < cols - 1)
                 std::cout << " ";
         }
@@ -165,7 +167,8 @@ void Matrix<K>::print(const std::string& text) const
     }
 
     // ---------- BOTTOM BORDER ----------
-    std::cout << COLOR_BRACE "  \u2514 " COLOR_RESET;
+    std::cout << std::string(text.size() + 3, ' ')
+         << COLOR_BRACE "\u2514 " COLOR_RESET;
     for (size_t c = 0; c < cols; ++c)
     {
         std::cout << std::string(colWidths[c], ' ');
@@ -276,7 +279,7 @@ Matrix<K> Matrix<K>::row_echelon() const
         std::size_t i = r;
 
         // Buscar fila con pivote no cero
-        while (i < m && M(i, lead) == 0)
+        while (i < m && M(i, lead) == K(0))
             ++i;
 
         // Si no hay pivote en esta columna, pasar a la siguiente
@@ -473,11 +476,17 @@ Matrix<K> Matrix<K>::projection(K fov, K ratio, K near, K far)
 
     Matrix<K> P(4, 4, std::vector<K>(16, K(0)));
 
-    P(0, 0) = 1 / (ratio * t);
-    P(1, 1) = 1 / t;
-    P(2, 2) = (far + near) / (near - far);
-    P(2, 3) = (2 * far * near) / (near - far);
-    P(3, 2) = K(-1);
+    // Column-major layout (but stored in row-major Matrix class)
+    // So we write P(row, col) exactly as the mathematical matrix.
+
+    P(0, 0) = 1 / (ratio * t);      // column 0
+    P(1, 1) = 1 / t;                // column 1
+
+    P(2, 2) = far / (far - near);   // column 2
+    P(3, 2) = (-near * far) / (far - near);
+
+    P(2, 3) = 1;                    // column 3
 
     return P;
 }
+

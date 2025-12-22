@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 10:55:54 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 14:30:53 by jutrera-         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:28:14 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void ex03()
     std::cout << "---------------------------\n";
     try
     {
-        std::cout << "  u · v = " COLOR_NUM << dot(u, v) << COLOR_RESET "\n\n";
+        std::cout << "  u * v = " COLOR_NUM << dot(u, v) << COLOR_RESET "\n\n";
     }
     catch(const std::exception& e)
     {

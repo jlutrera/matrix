@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 13:50:23 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 13:52:48 by jutrera-         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:05:27 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ K& Vector<K>::operator[](std::size_t i)
 template<typename K>
 void Vector<K>::print(const std::string& text) const
 {
-    std::cout << text << "\n";
-    std::cout << COLOR_BRACE "  [ " COLOR_RESET;
+    std::cout << text << " = ";
+    std::cout << COLOR_BRACE "[ " COLOR_RESET;
     for (std::size_t i = 0; i < data.size(); ++i)
     {
         std::cout << COLOR_NUM << data[i] << COLOR_RESET;

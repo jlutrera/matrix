@@ -31,6 +31,14 @@ void ex01()
 
     std::cout << COLOR_NAME "II. Result\n" COLOR_RESET;
     std::cout << "---------------------------\n";
-    Vector<K> lc = linear_combination(2.0f, u, -1.0f, v);
-    lc.print("  2u - v");
+    try
+    {
+        Vector<K> lc = linear_combination(2.0f, u, -1.0f, v);
+        lc.print("  2 * u - v");
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << COLOR_ERR "  Error: " << e.what() << COLOR_RESET "\n";
+    
+    }
 }
