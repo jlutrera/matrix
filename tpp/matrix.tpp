@@ -35,7 +35,7 @@ Matrix<K>::Matrix(std::initializer_list<std::initializer_list<K>> init)
 
     for (const auto& row : init)
         for (const auto& val : row)
-            data.push_back(val);
+            data.push_back(val);  //El almacenamiento es row-major
 }
 template<typename K>
 Matrix<K>::Matrix(std::size_t r, std::size_t c, const std::vector<K>& values) 
@@ -468,25 +468,96 @@ std::size_t Matrix<K>::rank() const
     return rank;
 }
 
-// PROJECTION MATRIX
+// PROJECTION MATRIX FOR OPENGL CONVENTIONS
+//   - clip space z ∈ [-1,1]
+//   - right-handed system
+//   - camera looks towards -Z
+//   - X to the right
+//   - Y upwards
+//   - near and far are positive distances
+//   - ratio = width / height
+//   - FOV vertical in radians
+
+// Para obtener la proyección en perspectiva, se multiplica el vector por P y luego se divide por W.
 template<typename K>
-Matrix<K> Matrix<K>::projection(K fov, K ratio, K near, K far)
+Matrix<K> Matrix<K>::projectionOpenGL(K fov, K ratio, K near, K far)
 {
+    // VALIDATIONS
+    // FOV must be in (0, pi) radians
+    if (fov <= K(0) || fov >= K(M_PI))
+        throw std::invalid_argument("FOV must be in (0, pi) radians");
+    // Aspect ratio must be positive
+    if (ratio <= K(0))
+        throw std::invalid_argument("Aspect ratio must be positive");
+    // Near and far must be positive
+    if (near <= K(0) || far <= K(0))
+        throw std::invalid_argument("Near and far must be positive");
+    // Near must be less than far
+    if (near >= far)
+        throw std::invalid_argument("Near plane must be less than far plane");
+
+    //  COMPUTE PROJECTION MATRIX
     K t = std::tan(fov / (K)2);
 
+    // Matriz de proyección 4x4 inicializada a cero
     Matrix<K> P(4, 4, std::vector<K>(16, K(0)));
 
-    // Column-major layout (but stored in row-major Matrix class)
-    // So we write P(row, col) exactly as the mathematical matrix.
+    // Escalado en X y Y
+    P(0, 0) = K(1) / (ratio * t);                   // Escala X según FOV y aspect ratio
+    P(1, 1) = K(1) / t;                             // Escala Y según FOV
 
-    P(0, 0) = 1 / (ratio * t);      // column 0
-    P(1, 1) = 1 / t;                // column 1
+    // Transformación de profundidad (Z)
+    P(2, 2) = -(far  + near) / (far - near);        // Mapea Z a clip space [-1,1]
+    P(2, 3) = -(K(2) * far * near) / (far - near);  // Ajuste de profundidad
 
-    P(2, 2) = far / (far - near);   // column 2
-    P(3, 2) = (-near * far) / (far - near);
-
-    P(2, 3) = 1;                    // column 3
-
+    // Componente homogénea
+    P(3, 2) = -K(1);                                // Homogeneización W = -Z
+ 
     return P;
 }
 
+// PROJECTION MATRIX FOR DIRECTX CONVENTIONS
+//   - clip space z ∈ [0,1]
+//   - right-handed system
+//   - camera looks towards +Z
+//   - X to the right
+//   - Y upwards
+//   - near and far are positive distances
+//   - ratio = width / height
+//   - FOV vertical in radians
+template<typename K>
+Matrix<K> Matrix<K>::projectionDirectX(K fov, K ratio, K near, K far)
+{
+    // VALIDATIONS
+    // FOV must be in (0, pi) radians
+    if (fov <= K(0) || fov >= K(M_PI))
+        throw std::invalid_argument("FOV must be in (0, pi) radians");
+    // Aspect ratio must be positive
+    if (ratio <= K(0))
+        throw std::invalid_argument("Aspect ratio must be positive");
+    // Near and far must be positive
+    if (near <= K(0) || far <= K(0))
+        throw std::invalid_argument("Near and far must be positive");
+    // Near must be less than far
+    if (near >= far)
+        throw std::invalid_argument("Near plane must be less than far plane");
+
+    //  COMPUTE PROJECTION MATRIX
+    K t = std::tan(fov / (K)2);
+
+    // Matriz de proyección 4x4 inicializada a cero
+    Matrix<K> P(4, 4, std::vector<K>(16, K(0)));
+
+    // Escalado en X y Y
+    P(0, 0) = K(1) / (ratio * t);               // Escala X según FOV y aspect ratio
+    P(1, 1) = K(1) / t;                         // Escala Y según FOV
+
+    // Transformación de profundidad (Z)
+    P(2, 2) = far / (near - far);               // Mapea Z a clip space [0,1]
+    P(2, 3) = (far * near) / (near - far);     // Ajuste de profundidad
+ 
+    // Componente homogénea
+    P(3, 2) = K(-1);                             // Homogeneización W = -Z
+
+    return P;
+}

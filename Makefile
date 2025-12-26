@@ -47,13 +47,6 @@ fclean		:	clean
 re			:	fclean all
 
 # ===========================
-#         MODO DEBUG
-# ===========================
-debug		:	CXXFLAGS += -g3 -fsanitize=address
-debug		:	re
-				@echo "$(GREEN)Compiled in DEBUG mode$(RESET)"
-
-# ===========================
 #         DEPENDENCIAS
 # ===========================
 -include $(DEP)

@@ -52,7 +52,8 @@ class Matrix
         Matrix<K> inverse();
         std::size_t rank() const;
 
-        static Matrix<K> projection(K fov, K ratio, K near, K far);
+        static Matrix<K> projectionOpenGL(K fov, K ratio, K near, K far);
+        static Matrix<K> projectionDirectX(K fov, K ratio, K near, K far);
 
         const K& operator()(std::size_t r, std::size_t c) const;
         K& operator()(std::size_t r, std::size_t c);

@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 10:56:22 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 14:30:59 by jutrera-         ###   ########.fr       */
+/*   Updated: 2025/12/26 11:23:26 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ void ex04()
 
     std::cout << COLOR_EX "[Exercise 04] NORM\n" COLOR_RESET;
 
-    Vector<K> u({1, 2});
-    Vector<K> v({-5, 6});
+    Vector<K> u({1, -2});
 
     std::cout << COLOR_NAME "I. Data\n" COLOR_RESET;
     std::cout << "---------------------------\n";
     u.print("  u");
-    v.print("  v");
 
     std::cout << COLOR_NAME "II. Results\n" COLOR_RESET;
     std::cout << "---------------------------\n";

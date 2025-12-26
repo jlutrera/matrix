@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 13:18:17 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 14:31:53 by jutrera-         ###   ########.fr       */
+/*   Updated: 2025/12/26 12:57:19 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,27 @@
 #include <complex>
 #include <stdexcept>
 #include <algorithm>
+#include "traits.hpp"
 
 // FUSED MUL-ADD (REAL: FMA, COMPLEX/OTHER: a*b + c)
 template<typename K>
 K fused_mul_add(K a, K b, K c)
 {
-    if constexpr (std::is_floating_point_v<K>)
+    if constexpr (is_complex_v<K>)
+        return a * b + c;   // complejos: no hay fma disponible
+    else
         return std::fma(a, b, c);   // más preciso para reales
-    
-    return a * b + c;   // complejos o cualquier otro tipo
 }
 
 // ABS VALUE (REAL: manual, COMPLEX: std::abs)
 template<typename K>
 double abs_value(const K& x)
 {
-    if constexpr (std::is_floating_point_v<K> || std::is_integral_v<K>)
+    if constexpr (is_complex_v<K>)
+        return std::abs(x);        // complejos: std::abs
+    else
         return (x < 0 ? -static_cast<double>(x) : static_cast<double>(x));
-
-    return std::abs(x);         // complejos: magnitud
 }
-
 
 //  LINEAR COMBINATION
 template<typename K>
@@ -102,8 +102,7 @@ K dot(const Vector<K>& u, const Vector<K>& v)
 
     for (std::size_t i = 0; i < u.size(); ++i)
     {
-        if constexpr (std::is_same_v<K, std::complex<float>> ||
-                      std::is_same_v<K, std::complex<double>>)
+        if constexpr (is_complex_v<K>)
             sum += std::conj(u[i]) * v[i];
         else
             sum += u[i] * v[i];
@@ -111,7 +110,6 @@ K dot(const Vector<K>& u, const Vector<K>& v)
 
     return sum;
 }
-
 
 //  NORM 1
 template<typename K>
@@ -133,10 +131,10 @@ double norm(const Vector<K>& u)
 
     for (std::size_t i = 0; i < u.size(); ++i)
     {
-        if constexpr (std::is_floating_point_v<K>)
-            sum = std::fma((double)u[i], (double)u[i], sum);
-        else
+        if constexpr (is_complex_v<K>)
             sum += std::norm(u[i]);
+        else
+            sum = std::fma((double)u[i], (double)u[i], sum);            
     }
 
     return std::pow(sum, 0.5);
@@ -161,12 +159,17 @@ double angle_cos(const Vector<K>& u, const Vector<K>& v)
     if (u.size() != v.size())
         throw std::invalid_argument("Vectors must have the same size");
 
-    auto d = dot(u, v);
-    double numerator = abs_value(d);
     double denom = norm(u) * norm(v);
-
     if (denom == 0)
         throw std::invalid_argument("Angle undefined for zero vector");
+
+    auto d = dot(u, v);
+    double numerator;
+
+    if constexpr (is_complex_v<K>)
+        numerator = abs_value(d);// Caso COMPLEJO → usar |<u,v>|
+    else
+        numerator = static_cast<double>(d);// Caso REAL → usar <u,v> con signo
 
     return numerator / denom;
 }

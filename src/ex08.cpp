@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 11:18:58 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 14:31:25 by jutrera-         ###   ########.fr       */
+/*   Updated: 2025/12/26 11:45:56 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void ex08()
 
     std::cout << COLOR_EX "[Exercise 08] TRACE\n" COLOR_RESET;
 
-    Matrix<K> A({{1, 2}, {5, 6}});
+    Matrix<K> A({{1, 2}, {-5, 6}});
 
     std::cout << COLOR_NAME "I. Data\n" COLOR_RESET;
     std::cout << "---------------------------\n";
