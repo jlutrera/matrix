@@ -37,6 +37,7 @@ Matrix<K>::Matrix(std::initializer_list<std::initializer_list<K>> init)
         for (const auto& val : row)
             data.push_back(val);  //El almacenamiento es row-major
 }
+
 template<typename K>
 Matrix<K>::Matrix(std::size_t r, std::size_t c, const std::vector<K>& values) 
     : rows(r), cols(c), data(values)
@@ -442,27 +443,52 @@ Matrix<K> Matrix<K>::inverse()
 template<typename K>
 std::size_t Matrix<K>::rank() const
 {
-    Matrix<K> R = this->row_echelon();  // obtener REF
-    std::size_t m = R.nrows();
-    std::size_t n = R.ncols();
+    Matrix<K> M = *this;
+    std::size_t m = rows;
+    std::size_t n = cols;
 
     std::size_t rank = 0;
+    std::size_t lead = 0;
 
-    for (std::size_t i = 0; i < m; ++i)
+    for (std::size_t r = 0; r < m && lead < n; ++r)
     {
-        bool non_zero_row = false;
+        // Buscar pivote no nulo en la columna lead
+        std::size_t i = r;
+        while (i < m && M(i, lead) == K(0))
+            ++i;
 
-        for (std::size_t j = 0; j < n; ++j)
+        if (i == m)
         {
-            if (abs_value(R(i, j)) != 0.0)
+            ++lead;
+            --r;        // reintentar misma fila con siguiente columna
+            continue;
+        }
+
+        // Intercambiar filas si es necesario
+        if (i != r)
+        {
+            for (std::size_t c = lead; c < n; ++c)
+                std::swap(M(r, c), M(i, c));
+        }
+
+        // Pivote encontrado → incrementa rango
+        ++rank;
+
+        K pivot = M(r, lead);
+
+        // Eliminación por debajo
+        for (std::size_t rr = r + 1; rr < m; ++rr)
+        {
+            if (M(rr, lead) != K(0))
             {
-                non_zero_row = true;
-                break;
+                K factor = M(rr, lead) / pivot;
+            
+                for (std::size_t c = lead; c < n; ++c)
+                    M(rr, c) -= factor * M(r, c);
             }
         }
 
-        if (non_zero_row)
-            ++rank;
+        ++lead;
     }
 
     return rank;
