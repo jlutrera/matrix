@@ -54,4 +54,4 @@ re			:	fclean all
 # ===========================
 #         PHONY
 # ===========================
-.PHONY		:	all clean fclean re debug
+.PHONY		:	all clean fclean re

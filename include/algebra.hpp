@@ -50,9 +50,6 @@ template<typename K>
 double norm_1(const Vector<K>& u);
 
 template<typename K>
-double norm(const Vector<K>& u);
-
-template<typename K>
 double norm_inf(const Vector<K>& u);
 
 // Cosine of angle

@@ -123,7 +123,9 @@ void Matrix<K>::print(const std::string& text) const
 {
     std::cout << text << " = ";
 
-    auto [rows, cols] = shape();
+    auto dims = shape();
+    auto rows = dims.first;
+    auto cols = dims.second;
 
     std::vector<size_t> colWidths(cols, 0);
 
