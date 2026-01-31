@@ -21,7 +21,7 @@
 #include <stdexcept>
 
 #include "vector.hpp"
-#include "algebra.hpp"   // NECESARIO para fused_mul_add y abs_value
+#include "algebra.hpp"
 #include "colors.hpp"
 
 
@@ -54,16 +54,11 @@ template<typename K>
 std::size_t Matrix<K>::ncols() const { return cols; }
 
 template<typename K>
-std::pair<std::size_t, std::size_t> Matrix<K>::shape() const
-{
-    return {rows, cols};
-}
+std::pair<std::size_t, std::size_t> Matrix<K>::shape() const { return {rows, cols}; }
 
+// IS SQUARE?
 template<typename K>
-bool Matrix<K>::is_square() const
-{
-    return rows == cols;
-}
+bool Matrix<K>::is_square() const { return rows == cols; }
 
 // ADD
 template<typename K>

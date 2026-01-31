@@ -6,20 +6,20 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 22:51:09 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/21 14:30:21 by jutrera-         ###   ########.fr       */
+/*   Updated: 2026/01/30 11:14:16 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <cstddef> // std::size_t
-#include <cmath> // std::fma
-#include <complex> // std::conj para dot complejo
-#include <stdexcept> // excepciones si las usas
+#include <cstddef>
+#include <cmath>
+#include <complex>
+#include <stdexcept>
 #include <algorithm>
 
-#include "vector.hpp" // Vector<K>
-#include "matrix.hpp" // Matrix<K>
+#include "vector.hpp"
+#include "matrix.hpp"
 
 // Fused multiply-add
 template<typename K>

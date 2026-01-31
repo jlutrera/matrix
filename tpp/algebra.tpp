@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 13:18:17 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/26 12:57:19 by jutrera-         ###   ########.fr       */
+/*   Updated: 2026/01/30 16:52:07 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,19 @@
 #include <algorithm>
 #include "traits.hpp"
 
-// ============================================================
-// HELPERS C++14 (reemplazan if constexpr)
-// ============================================================
-
-// FMA para reales
+// FUSED MUL-ADD 
+// for reals: using std::fma
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, K>::type
-fma_impl(K a, K b, K c)
-{
-    return std::fma(a, b, c);
-}
+fma_impl(K a, K b, K c) { return std::fma(a, b, c); }
 
-// FMA para complejos → no existe, usamos a*b + c
+// for complex → std::fma does not exist, so we use  a*b + c
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, K>::type
-fma_impl(K a, K b, K c)
-{
-    return a * b + c;
-}
+fma_impl(K a, K b, K c) { return a * b + c; }
 
-// ABS para reales
+// ABSOLUTE VALUE
+// for reals
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, double>::type
 abs_impl(const K& x)
@@ -46,29 +38,20 @@ abs_impl(const K& x)
     return (x < 0 ? -static_cast<double>(x) : static_cast<double>(x));
 }
 
-// ABS para complejos
+// for complex
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, double>::type
-abs_impl(const K& x)
-{
-    return std::abs(x);
-}
+abs_impl(const K& x) { return std::abs(x); }
 
 // DOT para reales
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, K>::type
-dot_impl(const K& a, const K& b)
-{
-    return a * b;
-}
+dot_impl(const K& a, const K& b) { return a * b; }
 
 // DOT para complejos (conjugado)
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, K>::type
-dot_impl(const K& a, const K& b)
-{
-    return std::conj(a) * b;
-}
+dot_impl(const K& a, const K& b) { return std::conj(a) * b; }
 
 // ============================================================
 // API ORIGINAL (sin C++17)
@@ -83,9 +66,7 @@ K fused_mul_add(K a, K b, K c)
 
 // ABS VALUE
 template<typename K>
-double abs_value(const K& x)
-{
-    return abs_impl(x);
+double abs_value(const K& x) { return abs_impl(x);
 }
 
 // LINEAR COMBINATION

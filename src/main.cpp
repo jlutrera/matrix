@@ -59,34 +59,39 @@ static void print_menu()
     std::cout << "==================================\n";
     std::cout << "Select an option:\n\n";
 
-    std::cout << COLOR_BRACE "  I.  BASIC ALGEBRA" COLOR_RESET "\n\n";
-    std::cout << COLOR_EX "  0 : " COLOR_RESET "Exercise 00: Addiction\n";
-    std::cout << COLOR_EX "  1 : " COLOR_RESET "Exercise 00: Subtraction\n";
-    std::cout << COLOR_EX "  2 : " COLOR_RESET "Exercise 00: Scaling\n";
-    std::cout << COLOR_EX "  3 : " COLOR_RESET "Exercise 01: Linear Combination\n";
-    std::cout << COLOR_EX "  4 : " COLOR_RESET "Exercise 02: Linear Interpolation\n\n";
+    std::cout << "  I.  BASIC ALGEBRA\n";
+    std::cout << "     ***************\n";
+    std::cout << "  0 : Exercise 00: Addiction\n";
+    std::cout << "  1 : Exercise 00: Subtraction\n";
+    std::cout << "  2 : Exercise 00: Scaling\n";
+    std::cout << "  3 : Exercise 01: Linear Combination\n";
+    std::cout << "  4 : Exercise 02: Linear Interpolation\n\n";
 
-    std::cout << COLOR_BRACE " II.  NORMS AND PRODUCTS" COLOR_RESET "\n\n";
-    std::cout << COLOR_EX "  5 : " COLOR_RESET "Exercise 03: Dot Product\n";
-    std::cout << COLOR_EX "  6 : " COLOR_RESET "Exercise 04: Norm\n";
-    std::cout << COLOR_EX "  7 : " COLOR_RESET "Exercise 05: Cosine\n";
-    std::cout << COLOR_EX "  8 : " COLOR_RESET "Exercise 06: Cross Product\n\n";
+    std::cout << " II.  NORMS AND PRODUCTS\n";
+    std::cout << "     ********************\n";
+    std::cout << "  5 : Exercise 03: Dot Product\n";
+    std::cout << "  6 : Exercise 04: Norm\n";
+    std::cout << "  7 : Exercise 05: Cosine\n";
+    std::cout << "  8 : Exercise 06: Cross Product\n\n";
 
-    std::cout << COLOR_BRACE "III.  MATRIX ALGEBRA" COLOR_RESET "\n\n";
-    std::cout << COLOR_EX "  9 : " COLOR_RESET "Exercise 07: Vector - Matrix Multiplication\n";
-    std::cout << COLOR_EX " 10 : " COLOR_RESET "Exercise 07: Matrix - Matrix Multiplication\n";
-    std::cout << COLOR_EX " 11 : " COLOR_RESET "Exercise 08: Trace\n";
-    std::cout << COLOR_EX " 12 : " COLOR_RESET "Exercise 09: Transpose\n\n";
+    std::cout << "III.  MATRIX ALGEBRA\n";
+    std::cout << "     ****************\n";
+    std::cout << "  9 : Exercise 07: Vector - Matrix Multiplication\n";
+    std::cout << " 10 : Exercise 07: Matrix - Matrix Multiplication\n";
+    std::cout << " 11 : Exercise 08: Trace\n";
+    std::cout << " 12 : Exercise 09: Transpose\n\n";
 
-    std::cout << COLOR_BRACE " IV.  SOLVING SYSTEMS OF LINEAR EQUATIONS" COLOR_RESET "\n\n";
-    std::cout << COLOR_EX "" COLOR_RESET " 13 : Exercise 10: Row-Echelon Form\n";
-    std::cout << COLOR_EX "" COLOR_RESET " 14 : Exercise 11: Determinant\n";
-    std::cout << COLOR_EX "" COLOR_RESET " 15 : Exercise 12: Inverse\n";
-    std::cout << COLOR_EX "" COLOR_RESET " 16 : Exercise 13: Rank\n\n";
+    std::cout << " IV.  SOLVING SYSTEMS OF LINEAR EQUATIONS\n";
+    std::cout << "     *************************************\n";
+    std::cout << " 13 : Exercise 10: Row-Echelon Form\n";
+    std::cout << " 14 : Exercise 11: Determinant\n";
+    std::cout << " 15 : Exercise 12: Inverse\n";
+    std::cout << " 16 : Exercise 13: Rank\n\n";
 
-    std::cout << COLOR_BRACE "  V.  BONUS" COLOR_RESET "\n\n";
-    std::cout << COLOR_EX " 17 : " COLOR_RESET "Exercise 14: Projection Matrix\n";
-    std::cout << COLOR_EX " 18 : " COLOR_RESET "Exercise 15: Complex vector spaces\n\n";
+    std::cout << "  V.  BONUS\n";
+    std::cout << "     *******\n";
+    std::cout << " 17 : Exercise 14: Projection Matrix\n";
+    std::cout << " 18 : Exercise 15: Complex vector spaces\n\n";
 
     std::cout << COLOR_ERR " 99 : " COLOR_RESET "Quit\n\n";
     std::cout << "Option: ";

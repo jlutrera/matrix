@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 13:50:23 by jutrera-          #+#    #+#             */
-/*   Updated: 2025/12/22 12:05:27 by jutrera-         ###   ########.fr       */
+/*   Updated: 2026/01/30 11:02:10 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "colors.hpp"      // COLOR_*
 #include "matrix.hpp"      // Matrix<K> (declaración suficiente)
 
+// CONSTRUCTOR WITH INITIALIZER LIST
 template<typename K>
 Vector<K>::Vector(std::initializer_list<K> init) : data(init) {}
 
