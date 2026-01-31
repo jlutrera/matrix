@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 13:18:17 by jutrera-          #+#    #+#             */
-/*   Updated: 2026/01/30 16:52:07 by jutrera-         ###   ########.fr       */
+/*   Updated: 2026/01/31 21:06:01 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 #include <algorithm>
 #include "traits.hpp"
 
-// FUSED MUL-ADD 
+// ****************************************
+// FUSED MUL-ADD
+// ****************************************
 // for reals: using std::fma
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, K>::type
@@ -29,7 +31,13 @@ template<typename K>
 typename std::enable_if<is_complex_v<K>::value, K>::type
 fma_impl(K a, K b, K c) { return a * b + c; }
 
+// Interface
+template<typename K>
+K fused_mul_add(K a, K b, K c) { return fma_impl(a, b, c); }
+
+// ****************************************
 // ABSOLUTE VALUE
+// ****************************************
 // for reals
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, double>::type
@@ -43,33 +51,41 @@ template<typename K>
 typename std::enable_if<is_complex_v<K>::value, double>::type
 abs_impl(const K& x) { return std::abs(x); }
 
-// DOT para reales
+// Interface
+template<typename K>
+double abs_value(const K& x) { return abs_impl(x); }
+
+// ****************************************
+// DOT PRODUCT
+// ****************************************
+// for reals
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, K>::type
 dot_impl(const K& a, const K& b) { return a * b; }
 
-// DOT para complejos (conjugado)
+// for complex
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, K>::type
 dot_impl(const K& a, const K& b) { return std::conj(a) * b; }
 
-// ============================================================
-// API ORIGINAL (sin C++17)
-// ============================================================
-
-// FUSED MUL-ADD
+// Interface
 template<typename K>
-K fused_mul_add(K a, K b, K c)
+K dot(const Vector<K>& u, const Vector<K>& v)
 {
-    return fma_impl(a, b, c);
+    if (u.size() != v.size())
+        throw std::invalid_argument("Vectors must have the same size");
+
+    K sum = K(0);
+
+    for (std::size_t i = 0; i < u.size(); ++i)
+        sum += dot_impl(u[i], v[i]);
+
+    return sum;
 }
 
-// ABS VALUE
-template<typename K>
-double abs_value(const K& x) { return abs_impl(x);
-}
-
+// ****************************************
 // LINEAR COMBINATION
+// ****************************************
 template<typename K>
 Vector<K> linear_combination(K a, const Vector<K>& u,
                              K b, const Vector<K>& v)
@@ -85,7 +101,10 @@ Vector<K> linear_combination(K a, const Vector<K>& u,
     return result;
 }
 
-// LERP (VECTORS)
+// ****************************************
+// LINEAR INTERPOLATION
+// ****************************************
+// for vectors
 template<typename K>
 Vector<K> lerp(const Vector<K>& u, const Vector<K>& v, double t)
 {
@@ -103,7 +122,7 @@ Vector<K> lerp(const Vector<K>& u, const Vector<K>& v, double t)
     return result;
 }
 
-// LERP (MATRICES)
+// for matrices
 template<typename K>
 Matrix<K> lerp(const Matrix<K>& A, const Matrix<K>& B, double t)
 {
@@ -122,26 +141,10 @@ Matrix<K> lerp(const Matrix<K>& A, const Matrix<K>& B, double t)
     return result;
 }
 
-// DOT PRODUCT
-template<typename K>
-K dot(const Vector<K>& u, const Vector<K>& v)
-{
-    if (u.size() != v.size())
-        throw std::invalid_argument("Vectors must have the same size");
-
-    K sum = K(0);
-
-    for (std::size_t i = 0; i < u.size(); ++i)
-        sum += dot_impl(u[i], v[i]);
-
-    return sum;
-}
-
-// ============================================================
-// NORM (SEPARADA EN DOS VERSIONES C++14)
-// ============================================================
-
-// L2 NORM (REALES)
+// ****************************************
+// L2 NORM
+// ****************************************
+// for reals
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, double>::type
 norm(const Vector<K>& u)
@@ -154,7 +157,7 @@ norm(const Vector<K>& u)
     return std::sqrt(sum);
 }
 
-// L2 NORM (COMPLEJOS)
+// for complex
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, double>::type
 norm(const Vector<K>& u)
@@ -167,7 +170,9 @@ norm(const Vector<K>& u)
     return std::sqrt(sum);
 }
 
+// ****************************************
 // NORM 1
+// ****************************************
 template<typename K>
 double norm_1(const Vector<K>& u)
 {
@@ -179,7 +184,9 @@ double norm_1(const Vector<K>& u)
     return sum;
 }
 
+// ****************************************
 // INFINITY NORM
+// ****************************************
 template<typename K>
 double norm_inf(const Vector<K>& u)
 {
@@ -191,7 +198,9 @@ double norm_inf(const Vector<K>& u)
     return maxv;
 }
 
+// ****************************************
 // COSINE OF ANGLE
+// ****************************************
 template<typename K>
 double angle_cos(const Vector<K>& u, const Vector<K>& v)
 {
@@ -208,7 +217,9 @@ double angle_cos(const Vector<K>& u, const Vector<K>& v)
     return numerator / denom;
 }
 
-// CROSS PRODUCT (3D)
+// ****************************************
+// CROSS PRODUCT
+// ****************************************
 template<typename K>
 Vector<K> cross_product(const Vector<K>& u, const Vector<K>& v)
 {
