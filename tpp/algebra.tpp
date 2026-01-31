@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 13:18:17 by jutrera-          #+#    #+#             */
-/*   Updated: 2026/01/31 21:06:01 by jutrera-         ###   ########.fr       */
+/*   Updated: 2026/01/31 21:26:43 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ Matrix<K> lerp(const Matrix<K>& A, const Matrix<K>& B, double t)
 // for reals
 template<typename K>
 typename std::enable_if<!is_complex_v<K>::value, double>::type
-norm(const Vector<K>& u)
+norm_impl(const Vector<K>& u)
 {
     double sum = 0.0;
 
@@ -160,7 +160,7 @@ norm(const Vector<K>& u)
 // for complex
 template<typename K>
 typename std::enable_if<is_complex_v<K>::value, double>::type
-norm(const Vector<K>& u)
+norm_impl(const Vector<K>& u)
 {
     double sum = 0.0;
 
@@ -168,6 +168,13 @@ norm(const Vector<K>& u)
         sum += std::norm(u[i]); // |z|²
 
     return std::sqrt(sum);
+}
+
+// Interface
+template<typename K>
+double norm(const Vector<K>& u)
+{
+    return norm_impl(u);
 }
 
 // ****************************************
